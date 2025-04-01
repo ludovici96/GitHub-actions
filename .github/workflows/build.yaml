@@ -19,10 +19,13 @@ jobs:
         dotnet-version: '9.0.x'
         
     - name: Restore dependencies
-      run: dotnet restore ClassLibraryProjects/StringLibrary.sln
+      working-directory: ./ClassLibraryProjects
+      run: dotnet restore
       
     - name: Build
-      run: dotnet build ClassLibraryProjects/StringLibrary.sln --no-restore
+      working-directory: ./ClassLibraryProjects
+      run: dotnet build --no-restore
       
     - name: Test
-      run: dotnet test ClassLibraryProjects/StringLibrary.sln --no-build --verbosity normal
+      working-directory: ./ClassLibraryProjects
+      run: dotnet test --no-build --verbosity normal
