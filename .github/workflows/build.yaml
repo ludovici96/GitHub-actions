@@ -26,6 +26,22 @@ jobs:
       working-directory: ./ClassLibraryProjects
       run: dotnet build --no-restore
       
-    - name: Test
+    - name: Test with coverage
       working-directory: ./ClassLibraryProjects
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger "trx;LogFileName=test-results.trx"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: ./ClassLibraryProjects/TestResults
+        
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: .NET Tests
+        path: "**/TestResults/*.trx"
+        reporter: dotnet-trx
+        fail-on-error: true
